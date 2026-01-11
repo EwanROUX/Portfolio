@@ -1,0 +1,1423 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ewan Roux - Portfolio UI/UX</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              zinc: { 850: "#1f1f22" },
+            },
+          },
+        },
+      };
+    </script>
+
+    <style>
+      .reveal {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: all 1s ease-out;
+      }
+      .reveal.active {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .fade-in {
+        animation: fadeIn 0.5s ease-in-out;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      ::-webkit-scrollbar {
+        width: 10px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #f4f4f5;
+      }
+      .dark ::-webkit-scrollbar-track {
+        background: #18181b;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #9333ea;
+        border-radius: 5px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #7e22ce;
+      }
+
+      .bubble {
+        position: absolute;
+        border-radius: 50%;
+        opacity: 0.4;
+        filter: blur(40px);
+        animation: breathe infinite ease-in-out;
+        z-index: -1;
+      }
+      @keyframes breathe {
+        0%,
+        100% {
+          transform: scale(0.8) translate(0, 0);
+          opacity: 0.3;
+        }
+        50% {
+          transform: scale(1.2) translate(20px, -20px);
+          opacity: 0.6;
+        }
+      }
+    </style>
+  </head>
+
+  <body
+    class="bg-gray-50 text-zinc-900 dark:bg-black dark:text-zinc-100 font-sans selection:bg-purple-500 selection:text-white overflow-x-hidden transition-colors duration-300"
+  >
+    <div
+      id="bubble-container"
+      class="fixed inset-0 w-full h-full pointer-events-none overflow-hidden z-0"
+    ></div>
+
+    <nav
+      class="fixed top-0 w-full z-50 bg-white/80 dark:bg-black/80 backdrop-blur-md border-b border-zinc-200 dark:border-zinc-800 transition-colors duration-300"
+    >
+      <div
+        class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center"
+      >
+        <div
+          class="text-2xl font-bold tracking-tighter cursor-pointer flex items-center gap-2"
+          onclick="scrollToSection('home')"
+        >
+          <span
+            class="bg-purple-600 text-white w-8 h-8 flex items-center justify-center rounded-lg"
+            >E</span
+          >
+          <span>Roux.</span>
+        </div>
+
+        <div class="flex items-center gap-4">
+          <div
+            class="hidden md:flex space-x-8 text-sm font-medium text-zinc-600 dark:text-zinc-400"
+          >
+            <button
+              onclick="scrollToSection('home')"
+              class="hover:text-purple-500 transition-colors"
+            >
+              Accueil
+            </button>
+            <button
+              onclick="scrollToSection('projets')"
+              class="hover:text-purple-500 transition-colors"
+            >
+              Projets
+            </button>
+            <button
+              onclick="scrollToSection('avis')"
+              class="hover:text-purple-500 transition-colors"
+            >
+              Avis
+            </button>
+            <button
+              onclick="scrollToSection('competences')"
+              class="hover:text-purple-500 transition-colors"
+            >
+              Compétences
+            </button>
+            <button
+              onclick="scrollToSection('services')"
+              class="hover:text-purple-500 transition-colors"
+            >
+              Services
+            </button>
+            <button
+              onclick="scrollToSection('contact')"
+              class="hover:text-purple-500 transition-colors"
+            >
+              Contact
+            </button>
+          </div>
+
+          <button
+            onclick="toggleTheme()"
+            class="p-2 rounded-full hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-colors text-zinc-800 dark:text-zinc-200"
+          >
+            <i data-lucide="sun" id="theme-icon" class="w-5 h-5"></i>
+          </button>
+
+          <button
+            class="md:hidden text-zinc-800 dark:text-zinc-100 focus:outline-none"
+            onclick="toggleMobileMenu()"
+          >
+            <i data-lucide="menu"></i>
+          </button>
+        </div>
+      </div>
+
+      <div
+        id="mobile-menu"
+        class="hidden md:hidden bg-white dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-800"
+      >
+        <div
+          class="px-6 py-4 flex flex-col space-y-4 text-zinc-600 dark:text-zinc-300"
+        >
+          <button
+            onclick="scrollToSection('home')"
+            class="text-left hover:text-purple-500"
+          >
+            Accueil
+          </button>
+          <button
+            onclick="scrollToSection('projets')"
+            class="text-left hover:text-purple-500"
+          >
+            Projets
+          </button>
+          <button
+            onclick="scrollToSection('avis')"
+            class="text-left hover:text-purple-500"
+          >
+            Avis
+          </button>
+          <button
+            onclick="scrollToSection('contact')"
+            class="text-left hover:text-purple-500"
+          >
+            Contact
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <section
+      id="home"
+      class="min-h-screen flex items-center pt-20 relative overflow-hidden z-10"
+    >
+      <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-12 w-full">
+        <div class="space-y-6 flex flex-col justify-center">
+          <div class="reveal">
+            <div
+              class="inline-flex items-center px-3 py-1 rounded-full border border-purple-500/30 bg-purple-500/10 text-purple-600 dark:text-purple-400 text-sm font-medium mb-4"
+            >
+              <span
+                class="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"
+              ></span>
+              Disponible
+            </div>
+            <h1
+              class="text-5xl md:text-7xl font-bold text-zinc-900 dark:text-white"
+            >
+              Je suis
+              <span
+                class="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-purple-700 dark:from-purple-400 dark:to-purple-600"
+                >Ewan Roux</span
+              >
+            </h1>
+            <p class="text-xl text-zinc-600 dark:text-zinc-400 mt-4">
+              Designer UI/UX & Freelance à Paris.
+            </p>
+            <p
+              class="text-lg text-zinc-500 dark:text-zinc-500 mt-1 font-medium"
+            >
+              Étudiant en WM1 | HETIC
+            </p>
+          </div>
+
+          <div class="reveal delay-200 flex flex-wrap gap-4 pt-4">
+            <button
+              onclick="scrollToSection('projets')"
+              class="px-8 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-full font-medium transition-all hover:scale-105 flex items-center gap-2 shadow-lg shadow-purple-600/20"
+            >
+              Voir mes projets <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </button>
+            <button
+              onclick="scrollToSection('contact')"
+              class="px-8 py-3 border border-zinc-300 dark:border-zinc-700 hover:border-purple-500 text-zinc-600 dark:text-zinc-300 hover:text-black dark:hover:text-white rounded-full font-medium transition-all"
+            >
+              Me contacter
+            </button>
+          </div>
+        </div>
+
+        <div
+          class="reveal delay-400 relative aspect-[4/5] md:aspect-auto w-full"
+        >
+          <div
+            class="relative md:absolute md:inset-0 w-full h-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl overflow-hidden shadow-2xl"
+          >
+            <img
+              src="./ImageMoi.png"
+              onerror="this.onerror=null; this.src='https://placehold.co/600x750/202020/a855f7?text=Photo+Ewan';"
+              alt="Ewan Roux"
+              class="w-full h-full object-contain hover:scale-105 transition-transform duration-700"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section
+      id="about"
+      class="py-24 bg-zinc-100 dark:bg-zinc-900/50 transition-colors duration-300"
+    >
+      <div class="max-w-6xl mx-auto px-6">
+        <div class="grid md:grid-cols-2 gap-12 items-stretch">
+          <div class="reveal flex flex-col h-full text-left">
+            <div>
+              <h2 class="text-3xl font-bold text-zinc-900 dark:text-white mb-6">
+                À propos
+              </h2>
+              <div
+                class="space-y-4 text-lg text-zinc-600 dark:text-zinc-400 leading-relaxed"
+              >
+                <p>
+                  Je suis Ewan Roux, designer UI/UX de 20 ans basé à Paris. Je
+                  conçois des interfaces intuitives et des supports visuels pour
+                  le digital et le print.
+                </p>
+                <p>
+                  J’ai collaboré avec des entreprises comme
+                  <strong>VBGaz</strong> et <strong>Smec</strong>, ainsi qu’avec
+                  des professionnels indépendants, notamment Maya Fortin,
+                  courtière dans l’immobilier et conseillère en patrimoine, pour
+                  la création de supports marketing et visuels.
+                </p>
+                <p>
+                  Je suis actuellement à la recherche d’une alternance afin de
+                  continuer à développer mes compétences et apporter ma
+                  créativité à une nouvelle équipe.
+                </p>
+              </div>
+            </div>
+            <div class="mt-auto pt-8">
+              <a
+                href="./CV personnels (1).pdf"
+                download
+                class="inline-flex items-center gap-2 text-purple-600 dark:text-purple-400 font-medium hover:underline mt-2"
+              >
+                <i data-lucide="download" class="w-4 h-4"></i> Télécharger mon
+                CV complet
+              </a>
+            </div>
+          </div>
+
+          <div class="reveal delay-200 h-full">
+            <div
+              class="bg-white dark:bg-zinc-900 p-8 rounded-2xl shadow-xl border border-zinc-200 dark:border-zinc-800 relative overflow-hidden h-full flex flex-col justify-center"
+            >
+              <div
+                class="absolute top-0 left-0 w-1.5 h-full bg-purple-600"
+              ></div>
+              <h3
+                class="text-xl font-bold text-zinc-900 dark:text-white mb-8 flex items-center gap-2"
+              >
+                <i data-lucide="calendar-check" class="text-purple-600"></i>
+                Disponibilités
+              </h3>
+              <div class="space-y-8">
+                <div class="relative pl-6">
+                  <div
+                    class="absolute left-0 top-1.5 w-2 h-2 rounded-full bg-zinc-300 dark:bg-zinc-600"
+                  ></div>
+                  <h4 class="font-bold text-lg text-zinc-900 dark:text-white">
+                    Stage (2 à 4 mois)
+                  </h4>
+                  <div
+                    class="inline-block bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 text-xs font-bold px-2 py-1 rounded mt-1 mb-2"
+                  >
+                    Mai 2026
+                  </div>
+                  <p class="text-zinc-600 dark:text-zinc-400 text-sm">
+                    Validation de 2ème année HETIC.
+                  </p>
+                </div>
+                <div
+                  class="border-t border-zinc-100 dark:border-zinc-800"
+                ></div>
+                <div class="relative pl-6">
+                  <div
+                    class="absolute left-0 top-1.5 w-2 h-2 rounded-full bg-green-500 animate-pulse"
+                  ></div>
+                  <h4 class="font-bold text-lg text-zinc-900 dark:text-white">
+                    Alternance (12/24 mois)
+                  </h4>
+                  <div
+                    class="inline-block bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 text-xs font-bold px-2 py-1 rounded mt-1 mb-2"
+                  >
+                    Disponible dès maintenant !
+                  </div>
+                  <div
+                    class="flex items-start gap-2 text-sm text-zinc-600 dark:text-zinc-400 mt-1"
+                  >
+                    <i data-lucide="clock" class="w-4 h-4 mt-0.5 shrink-0"></i>
+                    <span>Rythme : 1 sem. École / 3 sem. Entreprise</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="projets" class="py-24 relative">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="mb-12 reveal">
+          <h2 class="text-4xl font-bold text-zinc-900 dark:text-white mb-4">
+            Mes Projets
+          </h2>
+
+          <p class="text-lg text-zinc-700 dark:text-zinc-200 mb-0">
+            Découvrez une sélection de mes réalisations alliant réflexion UX,
+            design d'interface et créativité graphique.
+          </p>
+
+          <p
+            class="text-sm text-zinc-500 dark:text-zinc-400 flex items-center gap-1 mt-1"
+          >
+            <i data-lucide="mouse-pointer-click" class="w-3 h-3"></i>
+            Cliquez sur
+            <span class="text-purple-600 dark:text-purple-400 font-medium"
+              >"Voir détails"</span
+            >
+            pour explorer le contenu (images, vidéos, processus).
+          </p>
+        </div>
+
+        <div
+          id="projects-container"
+          class="grid grid-cols-1 md:grid-cols-6 gap-8"
+        ></div>
+      </div>
+    </section>
+
+    <section
+      id="avis"
+      class="py-24 bg-zinc-100/80 dark:bg-zinc-900/80 backdrop-blur-sm border-t border-zinc-200 dark:border-zinc-800 transition-colors duration-300 relative z-10"
+    >
+      <div class="max-w-7xl mx-auto px-6">
+        <h2
+          class="text-3xl font-bold mb-12 text-center text-zinc-900 dark:text-white reveal"
+        >
+          Avis Clients
+        </h2>
+        <div
+          class="grid md:grid-cols-4 gap-8"
+          id="testimonials-container"
+        ></div>
+
+        <div class="text-center mt-12 reveal">
+          <button
+            id="load-more-btn"
+            onclick="toggleTestimonials()"
+            class="inline-flex items-center gap-2 px-6 py-3 bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-all text-zinc-900 dark:text-white font-medium shadow-sm dark:shadow-none cursor-pointer"
+          >
+            Voir plus d'avis <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section
+      id="competences"
+      class="py-24 border-y border-zinc-200 dark:border-zinc-800 transition-colors duration-300"
+    >
+      <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16">
+        <div class="reveal">
+          <h2
+            class="text-3xl font-bold mb-8 flex items-center gap-3 text-zinc-900 dark:text-white"
+          >
+            <i data-lucide="monitor" class="text-purple-500"></i> Hard Skills
+          </h2>
+          <div id="skills-container" class="space-y-6"></div>
+        </div>
+
+        <div class="reveal delay-200">
+          <h2
+            class="text-3xl font-bold mb-8 flex items-center gap-3 text-zinc-900 dark:text-white"
+          >
+            <i data-lucide="check-circle" class="text-purple-500"></i> Soft
+            Skills
+          </h2>
+          <div class="grid grid-cols-2 gap-4">
+            <div
+              class="p-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg flex gap-3 items-center shadow-sm dark:shadow-none"
+            >
+              <div class="w-2 h-2 bg-purple-500 rounded-full"></div>
+              <span class="text-zinc-700 dark:text-zinc-300">Créativité</span>
+            </div>
+            <div
+              class="p-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg flex gap-3 items-center shadow-sm dark:shadow-none"
+            >
+              <div class="w-2 h-2 bg-purple-500 rounded-full"></div>
+              <span class="text-zinc-700 dark:text-zinc-300">Organisation</span>
+            </div>
+            <div
+              class="p-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg flex gap-3 items-center shadow-sm dark:shadow-none"
+            >
+              <div class="w-2 h-2 bg-purple-500 rounded-full"></div>
+              <span class="text-zinc-700 dark:text-zinc-300">Autonomie</span>
+            </div>
+            <div
+              class="p-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg flex gap-3 items-center shadow-sm dark:shadow-none"
+            >
+              <div class="w-2 h-2 bg-purple-500 rounded-full"></div>
+              <span class="text-zinc-700 dark:text-zinc-300"
+                >Communication</span
+              >
+            </div>
+            <div
+              class="p-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg flex gap-3 items-center shadow-sm dark:shadow-none"
+            >
+              <div class="w-2 h-2 bg-purple-500 rounded-full"></div>
+              <span class="text-zinc-700 dark:text-zinc-300">Efficacité</span>
+            </div>
+            <div
+              class="p-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg flex gap-3 items-center shadow-sm dark:shadow-none"
+            >
+              <div class="w-2 h-2 bg-purple-500 rounded-full"></div>
+              <span class="text-zinc-700 dark:text-zinc-300">Productivité</span>
+            </div>
+            <div
+              class="p-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg flex gap-3 items-center shadow-sm dark:shadow-none"
+            >
+              <div class="w-2 h-2 bg-purple-500 rounded-full"></div>
+              <span class="text-zinc-700 dark:text-zinc-300">Empathie</span>
+            </div>
+            <div
+              class="p-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg flex gap-3 items-center shadow-sm dark:shadow-none"
+            >
+              <div class="w-2 h-2 bg-purple-500 rounded-full"></div>
+              <span class="text-zinc-700 dark:text-zinc-300">Adaptabilité</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section
+      id="services"
+      class="py-24 bg-zinc-100 dark:bg-zinc-900/30 transition-colors duration-300"
+    >
+      <div class="max-w-7xl mx-auto px-6">
+        <h2
+          class="text-4xl font-bold mb-12 text-center text-zinc-900 dark:text-white reveal"
+        >
+          Mes Services
+        </h2>
+
+        <div class="grid md:grid-cols-4 gap-6" id="services-container"></div>
+
+        <div class="text-center mt-12 reveal">
+          <button
+            id="services-btn"
+            onclick="toggleServices()"
+            class="inline-flex items-center gap-2 px-6 py-3 bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-all text-zinc-900 dark:text-white font-medium shadow-sm dark:shadow-none cursor-pointer"
+          >
+            Voir tous mes services
+            <i data-lucide="arrow-down" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section
+      id="contact"
+      class="py-24 border-t border-zinc-200 dark:border-zinc-800 transition-colors duration-300"
+    >
+      <div class="max-w-4xl mx-auto px-6 grid md:grid-cols-2 gap-12">
+        <div class="reveal">
+          <h2 class="text-4xl font-bold mb-6 text-zinc-900 dark:text-white">
+            Contactez-moi
+          </h2>
+          <div class="space-y-4">
+            <a
+              href="mailto:eanroux47r@gmail.com"
+              class="flex items-center gap-4 text-zinc-600 dark:text-zinc-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
+            >
+              <i data-lucide="mail" class="text-purple-500"></i>
+              ewanroux47r@gmail.com
+            </a>
+            <a
+              href="https://www.linkedin.com/in/ewan-roux-a737922a4"
+              target="_blank"
+              class="flex items-center gap-4 text-zinc-600 dark:text-zinc-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
+            >
+              <i data-lucide="linkedin" class="text-purple-500"></i>
+              /in/ewan-roux
+            </a>
+            <a
+              href="./CV personnels (1).pdf"
+              download
+              class="inline-flex items-center gap-2 px-6 py-3 bg-zinc-200 dark:bg-zinc-800 rounded-lg hover:bg-zinc-300 dark:hover:bg-zinc-700 transition-colors mt-4 text-zinc-900 dark:text-white font-bold"
+            >
+              <i data-lucide="file-text"></i> Télécharger mon CV
+            </a>
+          </div>
+        </div>
+
+        <form
+          id="contact-form"
+          action="https://formspree.io/f/xblbvpje"
+          method="POST"
+          class="space-y-4 bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-lg dark:shadow-none reveal delay-200 transition-colors duration-300"
+        >
+          <input
+            type="text"
+            name="name"
+            placeholder="Nom"
+            class="w-full bg-zinc-50 dark:bg-black border border-zinc-300 dark:border-zinc-700 rounded-lg p-3 text-zinc-900 dark:text-white focus:border-purple-500 outline-none"
+            required
+          />
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            class="w-full bg-zinc-50 dark:bg-black border border-zinc-300 dark:border-zinc-700 rounded-lg p-3 text-zinc-900 dark:text-white focus:border-purple-500 outline-none"
+            required
+          />
+          <textarea
+            name="message"
+            placeholder="Message"
+            rows="4"
+            class="w-full bg-zinc-50 dark:bg-black border border-zinc-300 dark:border-zinc-700 rounded-lg p-3 text-zinc-900 dark:text-white focus:border-purple-500 outline-none"
+            required
+          ></textarea>
+          <button
+            type="submit"
+            id="form-button"
+            class="w-full bg-purple-600 hover:bg-purple-700 text-white p-3 rounded-lg font-bold transition-colors"
+          >
+            Envoyer
+          </button>
+          <p id="form-status" class="text-center text-sm hidden"></p>
+        </form>
+      </div>
+    </section>
+
+    <footer
+      class="py-8 text-center text-zinc-500 dark:text-zinc-600 text-sm border-t border-zinc-200 dark:border-zinc-900 transition-colors duration-300"
+    >
+      <p>© 2025 Ewan Roux. Tous droits réservés.</p>
+    </footer>
+
+    <script>
+      // 1. GESTION DU FORMULAIRE FORMSPREE (AJAX)
+      const form = document.getElementById("contact-form");
+      async function handleSubmit(event) {
+        event.preventDefault();
+        const status = document.getElementById("form-status");
+        const btn = document.getElementById("form-button");
+        const data = new FormData(event.target);
+        btn.disabled = true;
+        btn.innerHTML = "Envoi en cours...";
+        fetch(event.target.action, {
+          method: form.method,
+          body: data,
+          headers: { Accept: "application/json" },
+        })
+          .then((response) => {
+            if (response.ok) {
+              status.innerHTML = "Message envoyé avec succès !";
+              status.className = "text-center text-sm text-green-500 mt-2";
+              status.classList.remove("hidden");
+              form.reset();
+              btn.innerHTML = "Envoyer";
+              btn.disabled = false;
+              setTimeout(() => {
+                status.classList.add("hidden");
+              }, 5000);
+            } else {
+              response.json().then((data) => {
+                if (Object.hasOwn(data, "errors")) {
+                  status.innerHTML = data["errors"]
+                    .map((error) => error["message"])
+                    .join(", ");
+                } else {
+                  status.innerHTML =
+                    "Oups ! Il y a eu un problème lors de l'envoi.";
+                }
+                status.className = "text-center text-sm text-red-500 mt-2";
+                status.classList.remove("hidden");
+                btn.innerHTML = "Envoyer";
+                btn.disabled = false;
+              });
+            }
+          })
+          .catch((error) => {
+            status.innerHTML = "Oups ! Il y a eu un problème lors de l'envoi.";
+            status.className = "text-center text-sm text-red-500 mt-2";
+            status.classList.remove("hidden");
+            btn.innerHTML = "Envoyer";
+            btn.disabled = false;
+          });
+      }
+      form.addEventListener("submit", handleSubmit);
+
+      // 2. DONNÉES (DATA)
+
+      const projectsData = [
+        {
+          id: 1,
+          title: "Campagne Print VBGaz/Smec | Identité Visuelle Maya",
+          desc: "Création de supports marketing imprimés pour dynamiser la visibilité locale. Conception complète d'une identité visuelle moderne pour le secteur immobilier.",
+          tools: ["Figma", "Canva", "Remove"],
+          image: "./Image 1.png",
+          link: "#",
+          gallery: [
+            {
+              type: "image",
+              url: "./OFFRE SPECIALE RENTRÉE copie 2.png",
+              caption: "Affiche",
+              link: "https://www.linkedin.com/posts/ewan-roux-a737922a4_communicationvisuelle-graphisme-publicitaez-activity-7393721020118880256-D9ib?utm_source=share&utm_medium=member_desktop&rcm=ACoAAElxQHcBmI0kJrWn1A4uRk2R2ZQ0r0d3PPg",
+              desc: "Affiche Publicitaire sur des Bus.",
+            },
+            {
+              type: "image",
+              url: "./VB GAZ (logo) partenaire de votre club (logo) copie 2.png",
+              caption: "Affiche",
+              desc: "Affiche Publicitaire.",
+              link: "https://www.linkedin.com/posts/ewan-roux-a737922a4_graphisme-marketingvisuel-campagnehivernale-activity-7404120215569203200-55ff?utm_source=share&utm_medium=member_desktop&rcm=ACoAAElxQHcBmI0kJrWn1A4uRk2R2ZQ0r0d3PPg",
+            },
+            {
+              type: "image",
+              url: "./ChatGPT Image 2 oct. 2025, 19_02_52 copie.png",
+              caption: "Affiche",
+              desc: "Affiche Publicitaire.",
+            },
+            {
+              type: "image",
+              url: "./Venez comme vous etes copie 1.png",
+              caption: "Nouveau Logo",
+              desc: "Modernisation du logo.",
+            },
+            {
+              type: "image",
+              url: "./Venez comme vous etes 4.png",
+              caption: "Affiche",
+              desc: "Affiche 4x3m.",
+            },
+            {
+              type: "image",
+              url: "./Venez comme vous etes.png",
+              caption: "Mockup",
+              desc: "Mise en situation réelle.",
+            },
+            {
+              type: "image",
+              url: "./image principale.png",
+              caption: "Flyer Recto",
+              desc: "Design épuré.",
+              link: "https://www.linkedin.com/posts/ewan-roux-a737922a4_design-marketingdigital-communicationvisuelle-activity-7328716720943083520-VVu2?utm_source=share&utm_medium=member_desktop&rcm=ACoAAElxQHcBmI0kJrWn1A4uRk2R2ZQ0r0d3PPg",
+            },
+            {
+              type: "image",
+              url: "./Venez comme vous etes copie 2.png",
+              caption: "Flyer Recto",
+              desc: "Design épuré.",
+            },
+          ],
+        },
+        {
+          id: 2,
+          title: "Prototypage Figma",
+          desc: "Conception UI/UX d'une application mobile premium. Réalisation d'un prototype haute-fidélité interactif avec une navigation fluide et immersive.",
+          tools: ["Figma", "Sora", "Remove"],
+          image: "./Capture d’écran 2025-10-29 à 10.25.43.jpg",
+          link: "#",
+          gallery: [
+            {
+              type: "video",
+              url: "./Enregistrement de l’écran 2025-10-29 à 10.23.45.mov",
+              caption: "CAR'N'RED | Démo App",
+              desc: "Navigation fluide.",
+              link: "https://instagram.com",
+            },
+          ],
+        },
+        {
+          id: 3,
+          title: "E-Commerce | Shopify",
+          desc: "Développement d'une boutique e-commerce sur la thématique Gaming. Optimisation de l'interface pour la conversion et design responsive multi-supports.",
+          tools: ["Shopify", "ChatGPT", "Figma", "Remove"],
+          image: "./Enregistrement de l’écran 2025-11-24 à 13.28.26.mov",
+          link: "#",
+          gallery: [
+            {
+              type: "video",
+              url: "./Enregistrement de l’écran 2025-11-24 à 13.28.26.mov",
+              caption: "Vue Ordinateur",
+              desc: "Interface large.",
+              link: "https://minecraftstore1.myshopify.com",
+            },
+          ],
+        },
+        {
+          id: 4,
+          title: "Maquettes 3D | Blender",
+          desc: "Modélisation et rendu 3D d'environnements intérieurs réalistes. Travail approfondi sur les textures et l'éclairage pour un résultat visuel immersif.",
+          tools: ["Blender", "Sketchfab", "Tripo3D"],
+          image: "./Blender.png",
+          link: "#",
+          gallery: [
+            {
+              type: "image",
+              url: "https://placehold.co/600x400/202020/FFF?text=Brochure+Ext",
+              caption: "Brochure Extérieur",
+              desc: "Mise en valeur façade.",
+            },
+            {
+              type: "image",
+              url: "https://placehold.co/600x400/202020/FFF?text=Brochure+Int",
+              caption: "Brochure Intérieur",
+              desc: "Focus luminosité.",
+            },
+          ],
+        },
+        {
+          id: 5,
+          title: "IA Lab | Projets IA",
+          desc: "Exploration du développement assisté par IA pour créer des outils dédiés aux freelances. Conception d'applications de productivité et de gestion financière pour optimiser le quotidien.",
+          tools: ["Manus", "Gemini", "ChatGPT"],
+          image: "./Enregistrement de l’écran 2025-12-08 à 14.55.54.mov",
+          link: "#",
+          gallery: [
+            {
+              type: "video",
+              url: "./Enregistrement de l’écran 2025-12-08 à 14.55.54.mov",
+              caption: "Dashboard",
+              desc: "Vue d'ensemble.",
+            },
+            {
+              type: "video",
+              url: "./Enregistrement de l’écran 2025-11-21 à 16.39.06.mov",
+              caption: "Dashboard",
+              link: "https://www.linkedin.com/posts/ewan-roux-a737922a4_freelance-productivitaez-intelligenceartificielle-activity-7397665142626377729-ELOQ?utm_source=share&utm_medium=member_desktop&rcm=ACoAAElxQHcBmI0kJrWn1A4uRk2R2ZQ0r0d3PPg",
+              desc: "Vue d'ensemble.",
+            },
+            {
+              type: "video",
+              url: "./Enregistrement de l’écran 2025-11-28 à 17.59.48.mov",
+              caption: "Dashboard",
+              link: "https://www.linkedin.com/posts/ewan-roux-a737922a4_webdevelopment-designsystem-css-activity-7401689116351889408-jaLY?utm_source=share&utm_medium=member_desktop&rcm=ACoAAElxQHcBmI0kJrWn1A4uRk2R2ZQ0r0d3PPg",
+              desc: "Vue d'ensemble.",
+            },
+            {
+              type: "video",
+              url: "./Enregistrement de l’écran 2025-11-27 à 18.12.50.mov",
+              caption: "Dashboard",
+              link: "https://www.linkedin.com/posts/ewan-roux-a737922a4_threejs-webdev-ai-activity-7399860309256982528-3qre?utm_source=share&utm_medium=member_desktop&rcm=ACoAAElxQHcBmI0kJrWn1A4uRk2R2ZQ0r0d3PPg",
+              desc: "Vue d'ensemble.",
+            },
+            {
+              type: "video",
+              url: "./Enregistrement de l’écran 2025-11-28 à 17.59.48.mov",
+              caption: "Dashboard",
+              desc: "Vue d'ensemble.",
+            },
+          ],
+        },
+        //{
+        //id: 6,
+        //title: "Générateur de Cover 3D",
+        //desc: "Outil expérimental permettant de générer des couvertures d'album en 3D interactives via des prompts textuels.",
+        //tools: ["Python", "Three.js", "AI"],
+        //image: "https://placehold.co/800x600/202020/FFF?text=Cover+Generator", // À REMPLACER PAR TON IMAGE
+        //link: "#",
+        //gallery: [
+        //{ type: 'image', url: "https://placehold.co/600x400/202020/FFF?text=Interface", caption: "Interface", desc: "Génération en temps réel." }
+        //]
+        //}
+      ];
+
+      // Données des Compétences
+      const skillsData = [
+        { name: "Figma", level: 85 },
+        { name: "Canva", level: 100 },
+        { name: "Blender", level: 80 },
+        { name: "UI Design", level: 75 },
+        { name: "Prototypage", level: 80 },
+      ];
+
+      // Données des Avis
+      const testimonialsData = [
+        {
+          name: "Lionel Roux",
+          role: "Président VB Gaz et SMEC",
+          text: "Ewan a su parfaitement capturer l'essence de notre campagne.",
+          image:
+            "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100",
+        },
+        {
+          name: "Maya Fortin",
+          role: "Fondatrice Maya",
+          text: "Un travail remarquable sur mon identité visuelle et ma personne",
+          image:
+            "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100",
+        },
+        {
+          name: "Sonia Moulinet",
+          role: "Cliente",
+          text: "Les affiches sont superbes. Ewan a sû parfaitement répondre à mes attentes",
+          image:
+            "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100",
+        },
+        {
+          name: "Thomas Lefebvre",
+          role: "CEO Startup Tech",
+          text: "Une réactivité exemplaire et un design qui a boosté nos conversions.",
+          image:
+            "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100",
+        },
+      ];
+
+      const moreTestimonialsData = [
+        {
+          name: "Camille Martin",
+          role: "Responsable Com'",
+          text: "Ewan a tout de suite compris notre vision.",
+          image:
+            "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100",
+        },
+        {
+          name: "Lucas Dubois",
+          role: "Freelance Dev",
+          text: "Collaborer avec Ewan a été un vrai plaisir.",
+          image:
+            "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100",
+        },
+        {
+          name: "Sophie Bernard",
+          role: "Marketing Manager",
+          text: "Une touche de modernité indispensable.",
+          image:
+            "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100",
+        },
+        {
+          name: "Julien Moreau",
+          role: "Développeur Fullstack",
+          text: "Des maquettes toujours impeccables.",
+          image:
+            "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100",
+        },
+      ];
+
+      // Données des Services
+      const servicesData = [
+        {
+          title: "Design Print",
+          icon: "palette",
+          desc: "Affiches, flyers...",
+          type: "image",
+          url: "./Venez comme vous etes.png",
+        },
+        {
+          title: "UI/UX Design",
+          icon: "layout",
+          desc: "Interfaces web...",
+          type: "image",
+          url: "./Capture d’écran 2025-10-29 à 10.25.43.jpg",
+        },
+        {
+          title: "Branding",
+          icon: "pen-tool",
+          desc: "Identités visuelles...",
+          type: "image",
+          url: "./image principale.png",
+        },
+        {
+          title: "E-commerce",
+          icon: "shopping-bag",
+          desc: "Optimisation Shopify...",
+          type: "image",
+          url: "./Enregistrement de l’écran 2025-11-24 à 13.28.26.mov",
+        },
+        {
+          title: "Audit UX/UI",
+          icon: "search",
+          desc: "Analyse...",
+          type: "image",
+          url: "https://placehold.co/600x350/8b5cf6/FFF?text=UX+Audit+Report",
+        },
+        {
+          title: "Design System",
+          icon: "layers",
+          desc: "Bibliothèques...",
+          type: "image",
+          url: "https://placehold.co/600x350/10b981/FFF?text=Design+System",
+        },
+        {
+          title: "Intégration Web",
+          icon: "code",
+          desc: "Front-end...",
+          type: "video",
+          url: "https://www.w3schools.com/html/mov_bbb.mp4",
+        },
+        {
+          title: "Motion Design",
+          icon: "video",
+          desc: "Animation...",
+          type: "video",
+          url: "https://www.w3schools.com/html/mov_bbb.mp4",
+        },
+      ];
+
+      // 3. FONCTIONS D'AFFICHAGE (RENDER)
+
+      // Affichage des Projets
+      function renderProjects() {
+        const container = document.getElementById("projects-container");
+
+        container.innerHTML = projectsData
+          .map((project, index) => {
+            const isVideo =
+              project.image.endsWith(".mp4") || project.image.endsWith(".mov");
+
+            // 1. LOGIQUE EXTÉRIEURE (La grille principale)
+            // Les 2 premiers prennent 50% (col-span-3), les autres 33% (col-span-2)
+            const colSpanClass = index < 2 ? "md:col-span-3" : "md:col-span-2";
+
+            // 2. LOGIQUE INTÉRIEURE (La galerie des détails)
+            // Les 2 premiers ont une galerie sur 2 colonnes.
+            // Les autres ont une galerie sur 1 seule colonne (pile).
+            const innerGalleryGrid =
+              index < 2 ? "grid-cols-1 sm:grid-cols-2" : "grid-cols-1";
+
+            const mediaHTML = isVideo
+              ? `<video src="${project.image}" autoplay muted loop playsinline class="w-full h-full object-contain bg-black"></video>`
+              : `<img src="${project.image}" onerror="this.onerror=null; this.src='https://placehold.co/800x600/18181b/a855f7?text=Image+Manquante';" alt="${project.title}" class="w-full h-full object-contain bg-gray-100 dark:bg-black">`;
+
+            let detailsContent = "";
+
+            // --- SCÉNARIO SPÉCIAL : PROJET "ÉTUDE DE CAS" (ID 2) ---
+            if (project.id === 2) {
+              detailsContent = `
+                        <div class="space-y-8">
+                            <div class="border-b border-zinc-200 dark:border-zinc-700 pb-4 mb-6">
+                                <h4 class="text-2xl font-bold text-zinc-900 dark:text-white mb-2">Étude de Cas : Expérience Mobile</h4>
+                                <p class="text-zinc-600 dark:text-zinc-400">Refonte de l'expérience utilisateur pour une application automobile de luxe.</p>
+                            </div>
+
+                            <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+                                <div class="bg-zinc-100 dark:bg-zinc-900/50 p-5 rounded-xl border-l-4 border-red-500">
+                                    <h5 class="font-bold text-zinc-900 dark:text-white mb-3 flex items-center gap-2"><i data-lucide="alert-circle" class="w-4 h-4 text-red-500"></i> Le Challenge</h5>
+                                    <p class="text-sm text-zinc-600 dark:text-zinc-400">L’achat de pièces Porsche manquait d’immersion et de fluidité.
+                                        Objectif : une expérience premium fidèle à l’ADN Porsche.</p>
+                                </div>
+                                <div class="bg-zinc-100 dark:bg-zinc-900/50 p-5 rounded-xl border-l-4 border-purple-500">
+                                    <h5 class="font-bold text-zinc-900 dark:text-white mb-3 flex items-center gap-2"><i data-lucide="brain-circuit" class="w-4 h-4 text-purple-500"></i> Ma Réflexion</h5>
+                                    <ul class="text-sm text-zinc-600 dark:text-zinc-400 list-disc list-inside space-y-1">
+                                        <li>Parcours simplifié et rapide.</li>
+                                        <li>Wireframes axés performance.</li>
+                                        <li>Univers GT3 RS : précision & dynamisme.</li>
+                                    </ul>
+                                </div>
+                                <div class="bg-zinc-100 dark:bg-zinc-900/50 p-5 rounded-xl border-l-4 border-green-500">
+                                    <h5 class="font-bold text-zinc-900 dark:text-white mb-3 flex items-center gap-2"><i data-lucide="check-circle-2" class="w-4 h-4 text-green-500"></i> La Solution</h5>
+                                    <p class="text-sm text-zinc-600 dark:text-zinc-400">Une interface premium inspirée de la GT3 RS : rouge, blanc, efficacité.
+                                        Design immersif + interactions fluides pour un achat intuitif.</p>
+                                </div>
+                            </div>
+
+                            <h5 class="font-bold text-zinc-900 dark:text-white mt-8 mb-4 flex items-center gap-2"><i data-lucide="images"></i> Résultat Final & Prototypes</h5>
+                            
+                            <div class="grid ${innerGalleryGrid} gap-6">
+                                ${project.gallery
+                                  .map(
+                                    (item) => `
+                                    <div class="space-y-3 bg-white dark:bg-zinc-900 p-3 rounded-lg border border-zinc-200 dark:border-zinc-800 shadow-sm">
+                                        <div class="aspect-video bg-black rounded-lg overflow-hidden border border-zinc-200 dark:border-zinc-700 relative">
+                                            ${
+                                              item.type === "video"
+                                                ? `<video src="${item.url}" controls class="w-full h-full object-contain"></video>`
+                                                : `<img src="${item.url}" alt="${item.caption}" class="w-full h-full object-contain">`
+                                            }
+                                        </div>
+                                        <div class="flex justify-between items-start">
+                                            <div class="pr-2">
+                                                <p class="text-sm font-bold text-zinc-900 dark:text-white mb-1">${
+                                                  item.caption
+                                                }</p>
+                                                ${
+                                                  item.desc
+                                                    ? `<p class="text-xs text-zinc-600 dark:text-zinc-400 leading-snug">${item.desc}</p>`
+                                                    : ""
+                                                }
+                                            </div>
+                                            ${
+                                              item.link
+                                                ? `<a href="${item.link}" target="_blank" class="shrink-0 text-purple-500 hover:text-purple-700 dark:text-purple-400 dark:hover:text-purple-300 transition-colors"><i data-lucide="external-link" class="w-4 h-4"></i></a>`
+                                                : ""
+                                            }
+                                        </div>
+                                    </div>
+                                `
+                                  )
+                                  .join("")}
+                            </div>
+                        </div>
+                    `;
+            }
+            // --- SCÉNARIO 2 : PROJETS STANDARD ---
+            else {
+              detailsContent = `
+                        <h4 class="text-purple-600 dark:text-purple-400 font-bold mb-4 flex items-center gap-2"><i data-lucide="images"></i> Galerie</h4>
+                        
+                        <div class="grid ${innerGalleryGrid} gap-6">
+                            ${project.gallery
+                              .map(
+                                (item, index) => `
+                                <div class="space-y-3 bg-white dark:bg-zinc-900 p-3 rounded-lg border border-zinc-200 dark:border-zinc-800 shadow-sm dark:shadow-none ${
+                                  index >= 4 ? "hidden extra-item" : ""
+                                }">
+                                    <div class="aspect-video bg-black rounded-lg overflow-hidden border border-zinc-200 dark:border-zinc-700 relative">
+                                        ${
+                                          item.type === "video"
+                                            ? `<video src="${item.url}" controls class="w-full h-full object-contain"></video>`
+                                            : `<img src="${item.url}" alt="${item.caption}" class="w-full h-full object-contain">`
+                                        }
+                                    </div>
+                                    <div class="flex justify-between items-start">
+                                        <div class="pr-2">
+                                            <p class="text-sm font-bold text-zinc-900 dark:text-white mb-1">${
+                                              item.caption
+                                            }</p>
+                                            ${
+                                              item.desc
+                                                ? `<p class="text-xs text-zinc-600 dark:text-zinc-400 leading-snug">${item.desc}</p>`
+                                                : ""
+                                            }
+                                        </div>
+                                        ${
+                                          item.link
+                                            ? `<a href="${item.link}" target="_blank" class="shrink-0 text-purple-500 hover:text-purple-700 dark:text-purple-400 dark:hover:text-purple-300 transition-colors" title="Voir le projet"><i data-lucide="external-link" class="w-4 h-4"></i></a>`
+                                            : ""
+                                        }
+                                    </div>
+                                </div>
+                            `
+                              )
+                              .join("")}
+                        </div>
+                        
+                        <div class="flex flex-col items-center gap-3 mt-6">
+                            ${
+                              project.gallery.length > 4
+                                ? `
+                                <button onclick="showAllGallery(this)" class="text-sm px-4 py-2 bg-zinc-200 dark:bg-zinc-800 rounded-full hover:bg-zinc-300 dark:hover:bg-zinc-700 text-zinc-900 dark:text-white transition-colors">
+                                    Voir toute la galerie (${project.gallery.length})
+                                </button>
+                            `
+                                : ""
+                            }
+                        </div>
+                    `;
+            }
+
+            return `
+                <div class="${colSpanClass} group bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden hover:border-purple-500/50 transition-all duration-300 reveal shadow-sm dark:shadow-none">
+                    <div class="aspect-video overflow-hidden relative bg-black">
+                        ${mediaHTML}
+                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-4">
+                            <button onclick="toggleDetails(${
+                              project.id
+                            }, this)" class="px-6 py-2 bg-white text-black rounded-full hover:bg-purple-500 hover:text-white transition-colors font-medium cursor-pointer">Voir détails</button>
+                        </div>
+                    </div>
+                    
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-zinc-900 dark:text-white">${
+                          project.title
+                        }</h3>
+                        <p class="text-zinc-600 dark:text-zinc-400 text-sm mb-4">${
+                          project.desc
+                        }</p>
+                        <div class="flex flex-wrap gap-2">
+                            ${project.tools
+                              .map(
+                                (tool) => `
+                                <span class="text-xs text-purple-600 dark:text-purple-400 bg-zinc-100 dark:bg-zinc-950 px-2 py-1 rounded border border-zinc-200 dark:border-zinc-800">
+                                    ${tool}
+                                </span>
+                            `
+                              )
+                              .join("")}
+                        </div>
+                    </div>
+                    
+                    <div id="details-${
+                      project.id
+                    }" class="hidden bg-gray-50 dark:bg-black border-t border-zinc-200 dark:border-zinc-800 p-6 transition-colors duration-300 project-gallery-container">
+                        ${detailsContent}
+                        <div class="flex flex-col items-center gap-3 mt-6">
+                            <button onclick="toggleDetails(${
+                              project.id
+                            }, null)" class="text-sm text-zinc-500 hover:text-purple-600 dark:hover:text-white underline">
+                                Fermer les détails
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+          })
+          .join("");
+      }
+
+      // Fonctionnalités galerie projet
+      function showAllGallery(btn) {
+        const container = btn.closest(".project-gallery-container");
+        const hiddenItems = container.querySelectorAll(".extra-item");
+        hiddenItems.forEach((item) => item.classList.remove("hidden"));
+        btn.classList.add("hidden");
+      }
+
+      function toggleDetails(id, btn) {
+        const el = document.getElementById(`details-${id}`);
+        const isHidden = el.classList.contains("hidden");
+        if (isHidden) {
+          el.classList.remove("hidden");
+          if (btn) btn.textContent = "Masquer détails";
+        } else {
+          el.classList.add("hidden");
+          const mainBtn = el.closest(".group").querySelector("button");
+          if (mainBtn) mainBtn.textContent = "Voir détails";
+          const extraItems = el.querySelectorAll(".extra-item");
+          extraItems.forEach((item) => item.classList.add("hidden"));
+          const showMoreBtn = el.querySelector(
+            'button[onclick="showAllGallery(this)"]'
+          );
+          if (showMoreBtn) showMoreBtn.classList.remove("hidden");
+        }
+        lucide.createIcons();
+      }
+
+      // Affichage Compétences
+      function renderSkills() {
+        document.getElementById("skills-container").innerHTML = skillsData
+          .map(
+            (s) => `
+                <div>
+                    <div class="flex justify-between mb-2"><span class="text-zinc-700 dark:text-zinc-300">${s.name}</span><span class="text-zinc-900 dark:text-white font-bold">${s.level}%</span></div>
+                    <div class="h-2 bg-zinc-200 dark:bg-zinc-800 rounded-full"><div class="h-full bg-purple-600 rounded-full skill-bar" style="width: 0%" data-width="${s.level}%"></div></div>
+                </div>
+            `
+          )
+          .join("");
+      }
+
+      // Affichage Avis (Testimonials)
+      function createTestimonialHTML(t) {
+        return `
+                <div class="bg-white dark:bg-zinc-900 p-8 rounded-xl border border-zinc-200 dark:border-zinc-800 reveal shadow-sm dark:shadow-none">
+                    <div class="flex gap-1 text-yellow-500 mb-4"><i data-lucide="star" class="fill-current w-4"></i><i data-lucide="star" class="fill-current w-4"></i><i data-lucide="star" class="fill-current w-4"></i><i data-lucide="star" class="fill-current w-4"></i><i data-lucide="star" class="fill-current w-4"></i></div>
+                    <p class="text-zinc-600 dark:text-zinc-300 italic mb-6">"${t.text}"</p>
+                    <div class="flex items-center gap-4">
+                        <img src="${t.image}" class="w-10 h-10 rounded-full object-cover">
+                        <div><h4 class="font-bold text-sm text-zinc-900 dark:text-white">${t.name}</h4><p class="text-xs text-zinc-500">${t.role}</p></div>
+                    </div>
+                </div>
+            `;
+      }
+
+      function renderTestimonials() {
+        const container = document.getElementById("testimonials-container");
+        container.innerHTML = testimonialsData
+          .map((t) => createTestimonialHTML(t))
+          .join("");
+      }
+
+      let areTestimonialsExpanded = false;
+      function toggleTestimonials() {
+        const container = document.getElementById("testimonials-container");
+        const btn = document.getElementById("load-more-btn");
+        if (!areTestimonialsExpanded) {
+          moreTestimonialsData.forEach((t) => {
+            container.insertAdjacentHTML("beforeend", createTestimonialHTML(t));
+          });
+          btn.innerHTML = `Voir moins <i data-lucide="chevron-up" class="w-4 h-4"></i>`;
+          areTestimonialsExpanded = true;
+        } else {
+          container.innerHTML = testimonialsData
+            .map((t) => createTestimonialHTML(t))
+            .join("");
+          btn.innerHTML = `Voir plus d'avis <i data-lucide="arrow-right" class="w-4 h-4"></i>`;
+          areTestimonialsExpanded = false;
+          document
+            .getElementById("avis")
+            .scrollIntoView({ behavior: "smooth" });
+        }
+        lucide.createIcons();
+        document
+          .querySelectorAll(".reveal")
+          .forEach((el) => observer.observe(el));
+      }
+
+      // Affichage Services (Avec "Voir plus")
+      let areServicesExpanded = false;
+      function toggleServices() {
+        areServicesExpanded = !areServicesExpanded;
+        renderServices();
+        const btn = document.getElementById("services-btn");
+        if (areServicesExpanded) {
+          btn.innerHTML = `Voir moins <i data-lucide="chevron-up" class="w-4 h-4"></i>`;
+        } else {
+          btn.innerHTML = `Voir tous mes services <i data-lucide="arrow-down" class="w-4 h-4"></i>`;
+          document
+            .getElementById("services")
+            .scrollIntoView({ behavior: "smooth" });
+        }
+        lucide.createIcons();
+      }
+
+      function renderServices() {
+        const container = document.getElementById("services-container");
+        const servicesToShow = areServicesExpanded
+          ? servicesData
+          : servicesData.slice(0, 4);
+
+        container.innerHTML = servicesToShow
+          .map((s) => {
+            const isVideo =
+              s.type === "video" ||
+              (s.url && (s.url.endsWith(".mp4") || s.url.endsWith(".mov")));
+            return `
+                <div class="bg-white dark:bg-zinc-900 p-5 rounded-2xl border border-zinc-200 dark:border-zinc-800 hover:-translate-y-2 transition-transform reveal shadow-sm dark:shadow-none fade-in">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="p-3 bg-purple-50 dark:bg-zinc-950 rounded-lg w-fit text-purple-600 dark:text-purple-500 shrink-0">
+                            <i data-lucide="${s.icon}"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-zinc-900 dark:text-white leading-tight">${
+                          s.title
+                        }</h3>
+                    </div>
+                    <p class="text-zinc-600 dark:text-zinc-400 text-sm mb-4 line-clamp-2">${
+                      s.desc
+                    }</p>
+                    <div class="rounded-lg overflow-hidden border border-zinc-100 dark:border-zinc-800 aspect-video relative bg-zinc-50 dark:bg-zinc-950">
+                        ${
+                          isVideo
+                            ? `<video src="${s.url}" class="w-full h-full object-cover" autoplay muted loop playsinline></video>`
+                            : `<img src="${s.url}" alt="${s.title}" class="w-full h-full object-cover">`
+                        }
+                    </div>
+                </div>
+            `;
+          })
+          .join("");
+        lucide.createIcons();
+        document
+          .querySelectorAll(".reveal")
+          .forEach((el) => observer.observe(el));
+      }
+
+      // 4. INTERACTIVITÉ GLOBALE
+      function toggleTheme() {
+        const html = document.documentElement;
+        const icon = document.getElementById("theme-icon");
+        if (html.classList.contains("dark")) {
+          html.classList.remove("dark");
+          icon.setAttribute("data-lucide", "moon");
+          localStorage.theme = "light";
+        } else {
+          html.classList.add("dark");
+          icon.setAttribute("data-lucide", "sun");
+          localStorage.theme = "dark";
+        }
+        lucide.createIcons();
+      }
+
+      function createBubbles() {
+        const container = document.getElementById("bubble-container");
+        const colors = [
+          "bg-red-500 dark:bg-cyan-300",
+          "bg-amber-600 dark:bg-green-300",
+          "bg-blue-600 dark:bg-purple-300",
+          "bg-indigo-500 dark:bg-pink-300",
+        ];
+        for (let i = 0; i < 15; i++) {
+          const bubble = document.createElement("div");
+          const size = Math.random() * 100 + 50;
+          const left = Math.random() * 100;
+          const top = Math.random() * 100;
+          const color = colors[Math.floor(Math.random() * colors.length)];
+          const duration = Math.random() * 5 + 5;
+          const delay = Math.random() * 5;
+          bubble.className = `bubble ${color}`;
+          Object.assign(bubble.style, {
+            width: `${size}px`,
+            height: `${size}px`,
+            left: `${left}%`,
+            top: `${top}%`,
+            animationDuration: `${duration}s`,
+            animationDelay: `${delay}s`,
+          });
+          container.appendChild(bubble);
+        }
+      }
+
+      function toggleMobileMenu() {
+        document.getElementById("mobile-menu").classList.toggle("hidden");
+      }
+
+      function scrollToSection(id) {
+        document.getElementById(id).scrollIntoView({ behavior: "smooth" });
+        document.getElementById("mobile-menu").classList.add("hidden");
+      }
+
+      // Initialisation au chargement
+      if (
+        localStorage.theme === "dark" ||
+        (!("theme" in localStorage) &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches)
+      ) {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("active");
+              if (entry.target.querySelector(".skill-bar")) {
+                entry.target.querySelectorAll(".skill-bar").forEach((bar) => {
+                  bar.style.width = bar.getAttribute("data-width");
+                });
+              }
+            }
+          });
+        },
+        { threshold: 0.1 }
+      );
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const isDark = document.documentElement.classList.contains("dark");
+        document
+          .getElementById("theme-icon")
+          .setAttribute("data-lucide", isDark ? "sun" : "moon");
+        renderProjects();
+        renderSkills();
+        renderTestimonials();
+        renderServices();
+        createBubbles();
+        lucide.createIcons();
+        document
+          .querySelectorAll(".reveal")
+          .forEach((el) => observer.observe(el));
+        observer.observe(document.getElementById("skills-container"));
+      });
+    </script>
+  </body>
+</html>
